@@ -33,7 +33,7 @@ class EloquentExportCommand extends Command
     protected $signature = 'export:eloquent
                             {profile : Profile to export}
                             {file : Export or import file}
-                            {--id= : ID of the data you wish to export}
+                            {--where= : WHERE-clause of the data you wish to export}
                             {--import : Import }';
 
     /**
@@ -85,23 +85,27 @@ class EloquentExportCommand extends Command
             // -------------------
             //       Export
             // -------------------
-            if (empty($this->option('id'))) {
-                $this->warn('--id not set please set it');
-
-                return false;
-            }
+            //if (empty($this->option('id'))) {
+            //    $this->warn('--id not set please set it');
+            //
+            //    return false;
+            //}
             // Export
-            $this->info('Starting export...');
+            $this->info("Starting export of {$profile}...");
 
             $with       = array_keys($this->profile['relations']);
             $modelClass = $this->profile['model'];
             $model      = new $modelClass;
+            $where      = $this->option('where');
 
             // Get the primary column
             $primaryKey = $model->getKeyName();
-            $output     = $model->with($with)
-                                ->where($primaryKey, $this->option('id'))
-                                ->first();
+            $output     = $model->with($with);
+
+            if (!empty($where))
+                $output->whereRaw($where);
+                                //->where($primaryKey, $this->option('id'))
+                                //->first();
 
             $this->exportFile($output);
 

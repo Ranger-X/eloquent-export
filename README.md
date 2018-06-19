@@ -86,7 +86,7 @@ php artisan export:eloquent [profile] [path_to_file] [--id=] [--import]
 
 * [profile] - Name of a profile you have created in the `config/eloquent-export.php` file.
 * [path_to_file] - Export/Import file. 
-* [--id=] - Primary ID ($primaryKey) of the root model data you want to export. Exp. if you are exporting a user then it would be the user's ID.
+* [--where=] - WHERE-clause of the root model data you want to export. Exp. if you are exporting a specified user then it would be like: --where='id=111'.
 * [--import] - Import the data, if not set then data will be exported from the database.
 
 ### Example Usage
@@ -94,7 +94,7 @@ php artisan export:eloquent [profile] [path_to_file] [--id=] [--import]
 Export using the `user_posts` profile:
 
 ```
-php artisan export:eloquent user_posts /tmp/export/user_posts.json --id=34342
+php artisan export:eloquent user_posts /tmp/export/user_posts.json --where='id=34342'
 ```
 
 * The output file is in JSON format
