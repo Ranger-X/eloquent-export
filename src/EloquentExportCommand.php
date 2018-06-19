@@ -112,7 +112,7 @@ class EloquentExportCommand extends Command
                                 //->where($primaryKey, $this->option('id'))
                                 //->first();
 
-            $output = $output->all();
+            $output = $output->get();
 
             $this->exportFile($output);
 
