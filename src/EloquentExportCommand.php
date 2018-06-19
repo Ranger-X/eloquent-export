@@ -54,6 +54,11 @@ class EloquentExportCommand extends Command
         $this->profile = config('eloquent-export.profiles.'.$profile);
         $this->ignore  = config('eloquent-export.ignore');
 
+        if (!array_key_exists('model', $this->profile)) {
+            $this->error("Wrong profile $profile. Key 'model' does not exists in 'eloquent-export.profiles.$profile' config");
+            return false;
+        }
+
         if ($this->option('import')) {
             // -------------------
             //       Import
@@ -103,9 +108,11 @@ class EloquentExportCommand extends Command
             $output     = $model->with($with);
 
             if (!empty($where))
-                $output->whereRaw($where);
+                $output = $output->whereRaw($where);
                                 //->where($primaryKey, $this->option('id'))
                                 //->first();
+
+            $output = $output->all();
 
             $this->exportFile($output);
 
